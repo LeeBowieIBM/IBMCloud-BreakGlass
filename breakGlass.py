@@ -100,7 +100,7 @@ def powerOffClassicHardware(classic_bm_list, username, api_key):
     print("\nThere were a total of " + str(len(classic_bm_list)) + " Classic BMs found and " + str(len(POWERED_ON_BM_IDS)) + " were in the Powered On state")
 
 
-#Execute Functions
+#Call Functions
 start()
 (username, api_key) = getClassicCreds()
 classic_bm_list = getClassicHardware(username, api_key)
