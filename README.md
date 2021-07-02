@@ -8,7 +8,6 @@ Installation
 ------------
 
 Install requirements via pip:
-code-block:: bash
 
 	$ pip install -r requirements.txt
 
