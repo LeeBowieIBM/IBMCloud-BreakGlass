@@ -1,7 +1,7 @@
 IBM Cloud Shutdown Script
 =========================
 
-This is a Python script that will shutdown all VSIs and BareMetal servers in an IBM Cloud account. An API Key with the appropriate permissions on the account is required
+This is a Python script that will shutdown all VSIs and BareMetal servers in an IBM Cloud account. An API Key with the appropriate permissions on the account is required.
 
 Currently supports:
 * Classic VSIs 
