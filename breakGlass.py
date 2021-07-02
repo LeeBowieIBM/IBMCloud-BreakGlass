@@ -11,12 +11,14 @@
 
 import SoftLayer, sys
 
+#Function to put welcome message
 def start():
     print("*****************************************************************************************************************************")
     print("*         This script is meant to be used in a situation where ALL VSIs must be shutdown quickly. Use with CAUTION.         *")
     print("*****************************************************************************************************************************\n")
 
 
+#Function to get classic API key from user and confirm that they want to proceed
 def getClassicCreds():
     username = input("Enter Classic API Username: ")
     api_key = input("Enter Classic API Key: ")
@@ -30,12 +32,14 @@ def getClassicCreds():
         return (username, api_key)
 
 
+#Use Classic API Key to get a list of VSIs in the account
 def getClassicVSI(username, api_key):
     client = SoftLayer.create_client_from_env(username=username, api_key=api_key) 
     vsi_list = (client.call('SoftLayer_Account', 'getVirtualGuests',mask='powerState'))
     return vsi_list
 
 
+#Use the list of VSIs to issue poweroff API command for VSIs that are powered on.  
 def powerOffClassic(vsi_list, username, api_key):
     client = SoftLayer.create_client_from_env(username=username, api_key=api_key) 
     POWERED_ON_VM_IDS = []
@@ -64,12 +68,14 @@ def powerOffClassic(vsi_list, username, api_key):
     print("\nThere were a total of " + str(len(vsi_list)) + " Classic VSIs found and " + str(len(POWERED_ON_VM_IDS)) + " were in the Powered On state")
 
 
+#Use Classic API Key to get a list of BareMetal Servers in the account
 def getClassicHardware(username, api_key):
     client = SoftLayer.create_client_from_env(username=username, api_key=api_key) 
     classic_bm_list = (client.call('SoftLayer_Account', 'getHardware'))
     return classic_bm_list
 
 
+#Use the list of BareMetal servers to issue poweroff API command for BMs that are powered on.  
 def powerOffClassicHardware(classic_bm_list, username, api_key):
     client = SoftLayer.create_client_from_env(username=username, api_key=api_key) 
     POWERED_ON_BM_IDS = []
@@ -94,6 +100,7 @@ def powerOffClassicHardware(classic_bm_list, username, api_key):
     print("\nThere were a total of " + str(len(classic_bm_list)) + " Classic BMs found and " + str(len(POWERED_ON_BM_IDS)) + " were in the Powered On state")
 
 
+#Execute Functions
 start()
 (username, api_key) = getClassicCreds()
 classic_bm_list = getClassicHardware(username, api_key)
