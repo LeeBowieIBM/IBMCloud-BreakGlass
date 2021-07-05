@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-################################################################################################################################################################
-## This is a Python script that will shutdown all VSIs and BareMetal servers in an IBM Cloud account. An API Key with the appropriate permissions on the account is required
+##
+## This is a Python script that will power off all VSIs and BareMetal servers in an IBM Cloud account. An API Key with the appropriate permissions on the account is required
 ## Currently supports: Classic VSIs, Classic BareMetal
-################################################################################################################################################################
+##
 ## License: MIT License 
 ## Author: Chris Sciarrino
 ## Version: 0.1
 ## Email: sciar@ca.ibm.com
-################################################################################################################################################################
+##
 
 import SoftLayer, sys
 
 #Function to put welcome message
 def start():
     print("*****************************************************************************************************************************")
-    print("*         This script is meant to be used in a situation where ALL VSIs must be shutdown quickly. Use with CAUTION.         *")
+    print("*         This script is meant to be used in a situation where ALL VSIs must be powered off quickly. Use with CAUTION.         *")
     print("*****************************************************************************************************************************\n")
 
 
@@ -64,9 +64,7 @@ def powerOffClassic(vsi_list, username, api_key):
                     print("Done.")
         except:
             print("Error occured with " + VM_NAME)
- 
-    print("\nThere were a total of " + str(len(vsi_list)) + " Classic VSIs found and " + str(len(POWERED_ON_VM_IDS)) + " were in the Powered On state")
-
+    return POWERED_ON_VM_IDS
 
 #Use Classic API Key to get a list of BareMetal Servers in the account
 def getClassicHardware(username, api_key):
@@ -96,14 +94,19 @@ def powerOffClassicHardware(classic_bm_list, username, api_key):
                     print("Done.\n")
         except:
             print("Error occured with " + BM_NAME)
-
+    return POWERED_ON_BM_IDS
+    
+def summary(classic_bm_list, vsi_list, POWERED_ON_BM_IDS, POWERED_ON_VM_IDS):
+    print("\n------------------------------------------------------------------------------------------------------------------------------------------------")
+    print("\nThere were a total of " + str(len(vsi_list)) + " Classic VSIs found and " + str(len(POWERED_ON_VM_IDS)) + " were in the Powered On state")
     print("\nThere were a total of " + str(len(classic_bm_list)) + " Classic BMs found and " + str(len(POWERED_ON_BM_IDS)) + " were in the Powered On state")
-
+    
 
 #Call Functions
 start()
 (username, api_key) = getClassicCreds()
 classic_bm_list = getClassicHardware(username, api_key)
 vsi_list = getClassicVSI(username, api_key)
-powerOffClassic(vsi_list, username, api_key)
-powerOffClassicHardware(classic_bm_list, username, api_key)
+POWERED_ON_VM_IDS = powerOffClassic(vsi_list, username, api_key)
+POWERED_ON_BM_IDS = powerOffClassicHardware(classic_bm_list, username, api_key)
+summary(classic_bm_list, vsi_list, POWERED_ON_BM_IDS, POWERED_ON_VM_IDS)
